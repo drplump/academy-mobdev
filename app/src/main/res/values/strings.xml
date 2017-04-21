@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name" translatable="false">Academy.Translator</string>
+    <string name="tabHistory">History</string>
+    <string name="tabFavourites">Favourites</string>
+    <string name="findInHistory">Find in history</string>
+    <string name="buttonDescription">Button</string>
+    <string name="textTapToEnterText">Tap to enter text</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

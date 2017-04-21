@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="findInHistory">Найти в истории</string>
+    <string name="tabFavourites">Избранное</string>
+    <string name="tabHistory">История</string>
+    <string name="buttonDescription">Кнопка</string>
+    <string name="textTapToEnterText">Нажми для ввода</string>
+</resources>

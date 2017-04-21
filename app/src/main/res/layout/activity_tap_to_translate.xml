@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.drplump.droid.test02.TapToTranslateActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:contentDescription="@string/buttonDescription"
+            app:srcCompat="@drawable/ic_keyboard_backspace_black_24dp"
+            android:backgroundTint="@android:color/white"
+            android:onClick="goHome"/>
+
+        <EditText
+            android:id="@+id/text_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="8"
+            android:hint="@string/app_name"
+            android:inputType="text"
+            android:imeOptions="actionGo"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:contentDescription="@string/buttonDescription"
+            app:srcCompat="@drawable/ic_clear_black_24dp"
+            android:backgroundTint="@android:color/white"
+            android:onClick="clearInput"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp" >
+
+        <Space
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:id="@+id/text_translated"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="8"
+            android:hint="@string/app_name"
+            android:editable="false"
+            android:focusable="false"
+            android:clickable="true" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:contentDescription="@string/buttonDescription"
+            app:srcCompat="@drawable/ic_play_circle_filled_black_24dp"
+            android:backgroundTint="@android:color/white"
+            android:onClick="setResult"/>
+
+    </LinearLayout>
+
+</LinearLayout>
