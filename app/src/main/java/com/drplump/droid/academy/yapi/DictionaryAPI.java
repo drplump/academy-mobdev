@@ -1,6 +1,6 @@
-package com.drplump.droid.test02.yapi;
+package com.drplump.droid.academy.yapi;
 
-import com.drplump.droid.test02.cache.Cache;
+import com.drplump.droid.academy.cache.Cache;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

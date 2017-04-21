@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.drplump.droid.test02">
+    package="com.drplump.droid.academy">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application
@@ -9,13 +9,13 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.drplump.droid.academy.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TapToTranslateActivity" android:parentActivityName=".MainActivity" />
+        <activity android:name="com.drplump.droid.academy.TapToTranslateActivity" android:parentActivityName="com.drplump.droid.academy.MainActivity" />
 
     </application>
 

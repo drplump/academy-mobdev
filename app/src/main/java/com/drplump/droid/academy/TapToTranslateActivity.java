@@ -1,4 +1,4 @@
-package com.drplump.droid.test02;
+package com.drplump.droid.academy;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,7 +13,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.drplump.droid.test02.yapi.TranslateAPI;
+import com.drplump.droid.academy.yapi.TranslateAPI;
 
 public class TapToTranslateActivity extends AppCompatActivity {
 

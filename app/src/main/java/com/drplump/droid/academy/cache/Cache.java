@@ -1,4 +1,4 @@
-package com.drplump.droid.test02.cache;
+package com.drplump.droid.academy.cache;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;

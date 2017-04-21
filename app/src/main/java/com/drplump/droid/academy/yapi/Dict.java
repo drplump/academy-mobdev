@@ -1,4 +1,4 @@
-package com.drplump.droid.test02.yapi;
+package com.drplump.droid.academy.yapi;
 
 
 import java.util.ArrayList;

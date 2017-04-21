@@ -1,8 +1,6 @@
-package com.drplump.droid.test02;
+package com.drplump.droid.academy;
 
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,9 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;

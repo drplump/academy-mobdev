@@ -1,27 +1,27 @@
-package com.drplump.droid.test02.hist;
+package com.drplump.droid.academy.hist;
 
 
 public class HistoryItem {
     public final String source;
-    public final String translation;
+    public final String translated;
     public final String direct;
-    private boolean favourite;
+    private boolean favourites;
 
     public HistoryItem(String source, String translation, String direct) {
         this.source = source;
-        this.translation = translation;
+        this.translated = translation;
         this.direct = direct;
     }
 
     public void favouriteIt() {
-        this.favourite = true;
+        this.favourites = true;
     }
 
     public void ignoreIt() {
-        this.favourite = false;
+        this.favourites = false;
     }
 
-    public boolean isFavourite() {
-        return this.favourite;
+    public boolean isFavourites() {
+        return this.favourites;
     }
 }

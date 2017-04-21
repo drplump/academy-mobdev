@@ -1,4 +1,4 @@
-package com.drplump.droid.test02;
+package com.drplump.droid.academy;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

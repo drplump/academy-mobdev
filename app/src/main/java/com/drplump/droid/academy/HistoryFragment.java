@@ -1,6 +1,7 @@
-package com.drplump.droid.test02;
+package com.drplump.droid.academy;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,11 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.drplump.droid.test02.hist.History;
-import com.drplump.droid.test02.hist.HistoryItem;
-import com.drplump.droid.test02.yapi.Dict;
-
-import java.util.List;
+import com.drplump.droid.academy.hist.History;
+import com.drplump.droid.academy.hist.HistoryItem;
 
 public class HistoryFragment extends Fragment {
     private static final String TEXT_PARAMETER_KEY = "dictionary.text";
@@ -28,6 +26,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new ReadHistoryTask().execute();
     }
 
     @Override
@@ -46,12 +45,28 @@ public class HistoryFragment extends Fragment {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.history_item, scroller, false);
             TextView textSource = (TextView) view.findViewById(R.id.hitem_source);
-            textSource.setText(h.getText());
+            textSource.setText(h.source);
             TextView textTranslated = (TextView) view.findViewById(R.id.hitem_translated);
-            textTranslated.setText(h.getTs());
+            textTranslated.setText(h.translated);
             scroller.addView(view);
         }
 
+    }
+
+    private class ReadHistoryTask extends AsyncTask<String, Void, History> {
+
+        @Override
+        protected History doInBackground(String... params) {
+            History history = new History(getContext().getFilesDir());
+            return history;
+        }
+
+        @Override
+        protected void onPostExecute(History h) {
+            super.onPostExecute(h);
+            history = h;
+            updateHistory();
+        }
     }
 
 }

@@ -1,12 +1,11 @@
-package com.drplump.droid.test02;
+package com.drplump.droid.academy;
 
-import com.drplump.droid.test02.yapi.ELang;
-import com.drplump.droid.test02.yapi.Lang;
-import com.drplump.droid.test02.yapi.TranslateAPI;
+import com.drplump.droid.academy.yapi.ELang;
+import com.drplump.droid.academy.yapi.Lang;
+import com.drplump.droid.academy.yapi.TranslateAPI;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;

@@ -1,19 +1,15 @@
-package com.drplump.droid.test02;
+package com.drplump.droid.academy;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.drplump.droid.test02.yapi.API;
-import com.drplump.droid.test02.yapi.Dict;
-import com.drplump.droid.test02.yapi.DictionaryAPI;
+import com.drplump.droid.academy.yapi.Dict;
+import com.drplump.droid.academy.yapi.DictionaryAPI;
 
 import java.util.ArrayList;
 import java.util.List;

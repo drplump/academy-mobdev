@@ -1,17 +1,14 @@
-package com.drplump.droid.test02;
+package com.drplump.droid.academy;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +20,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.drplump.droid.test02.yapi.ELang;
-import com.drplump.droid.test02.yapi.Lang;
-import com.drplump.droid.test02.yapi.TranslateAPI;
+import com.drplump.droid.academy.yapi.ELang;
+import com.drplump.droid.academy.yapi.Lang;
+import com.drplump.droid.academy.yapi.TranslateAPI;
 
 import java.util.ArrayList;
 import java.util.List;

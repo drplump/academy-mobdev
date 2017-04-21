@@ -1,4 +1,4 @@
-package com.drplump.droid.test02;
+package com.drplump.droid.academy;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
