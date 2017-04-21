@@ -15,7 +15,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-class Cache {
+public class Cache {
 
     static String LANG_CACHE = "/langs";
     static String DICT_CACHE = "/dict";
