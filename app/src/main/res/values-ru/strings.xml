@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="findInHistory">Найти в истории</string>
-    <string name="tabFavourites">Избранное</string>
-    <string name="tabHistory">История</string>
-    <string name="buttonDescription">Кнопка</string>
-    <string name="textTapToEnterText">Нажми для ввода</string>
+    <string name="find_in_history">Найти в истории</string>
+    <string name="button_description">Кнопка</string>
+    <string name="text_tap_to_enter">Нажмите для ввода</string>
+    <string name="text_enter_text">Введите текст</string>
 </resources>

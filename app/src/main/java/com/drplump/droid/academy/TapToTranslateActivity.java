@@ -36,8 +36,10 @@ public class TapToTranslateActivity extends AppCompatActivity {
         langTo = getIntent().getStringExtra(TranslateFragment.LANG_TO_KEY);
 
         textInput = (EditText) findViewById(R.id.text_input);
+        textInput.setHint(getString(R.string.text_enter_text) + " (" + langFrom.toUpperCase() + ")");
         textInput.requestFocus();
         textTranslated = (EditText) findViewById(R.id.text_translated);
+        textTranslated.setHint(getString(R.string.text_enter_text) + " (" + langTo.toUpperCase() + ")");
 
         textInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

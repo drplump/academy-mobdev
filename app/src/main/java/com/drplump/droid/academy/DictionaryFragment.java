@@ -1,11 +1,15 @@
 package com.drplump.droid.academy;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.drplump.droid.academy.yapi.Dict;
@@ -20,7 +24,6 @@ public class DictionaryFragment extends Fragment {
 
     private String text;
     private String direct;
-    private List<Dict> dictList;
 
     public DictionaryFragment() {
         // Required empty public constructor
@@ -41,20 +44,49 @@ public class DictionaryFragment extends Fragment {
         if (getArguments() != null) {
             text = getArguments().getString(TEXT_PARAMETER_KEY);
             direct = getArguments().getString(DIRECT_PARAMETER_KEY);
+            new GetDictTask().execute(text, direct);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dictionary, container, false);
         TextView textView = (TextView) view.findViewById(R.id.dict_text);
         textView.setText(text);
+
+        ImageButton favorButton = (ImageButton) view.findViewById(R.id.button_favor_dict);
+        favorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         return view;
     }
 
     private void showDictList(List<Dict> dicts) {
+        if (dicts.isEmpty()) return;
+        LinearLayout container = (LinearLayout) getView().findViewById(R.id.dict_container);
+        TextView dictTs = (TextView) getView().findViewById(R.id.dict_ts);
+        dictTs.setText(dicts.get(0).getTs());
+
+        for (Dict d : dicts) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LinearLayout dictView = (LinearLayout) inflater.inflate(R.layout.dictionary_item, container, false);
+            TextView textPos = (TextView) dictView.findViewById(R.id.dict_pos);
+            textPos.setText(d.getPos());
+            for(Dict.Trans t : d.getTr()) {
+                View trView = inflater.inflate(R.layout.dictionary_tr_item, container, false);
+                TextView textSource = (TextView) trView.findViewById(R.id.ditem_tr);
+                textSource.setText(t.getText());
+                TextView textMean = (TextView) trView.findViewById(R.id.ditem_mean);
+                textMean.setText(TextUtils.join(", ", t.getMean()));
+                dictView.addView(trView);
+            }
+            container.addView(dictView);
+        }
+
     }
 
 
@@ -66,7 +98,7 @@ public class DictionaryFragment extends Fragment {
             DictionaryAPI api = new DictionaryAPI(getContext().getFilesDir());
             List<Dict> list;
             try {
-                list = api.lookup(text, direct, getContext().getResources().getConfiguration().locale.getLanguage());
+                list = api.lookup(params[0], params[1], getContext().getResources().getConfiguration().locale.getLanguage());
             } catch (Exception ex) {
                 list = new ArrayList<>();
             }

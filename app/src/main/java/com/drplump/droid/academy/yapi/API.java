@@ -131,7 +131,7 @@ public abstract class API {
             Node node = nodeList.item(i);
             String code = node.getAttributes().getNamedItem("key").getNodeValue();
             String description = node.getAttributes().getNamedItem("value").getNodeValue();
-            list.add(new Lang(code, description, code.equals(locale_code)));
+            list.add(new Lang(code, description, (code.equals(locale_code) || Lang.SUPER_PREFERRED.contains(code))));
         }
         if(list.isEmpty()) cache.delete();
         return list;

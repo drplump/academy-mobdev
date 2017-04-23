@@ -20,6 +20,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.drplump.droid.academy.hist.History;
+import com.drplump.droid.academy.hist.HistoryItem;
 import com.drplump.droid.academy.yapi.ELang;
 import com.drplump.droid.academy.yapi.Lang;
 import com.drplump.droid.academy.yapi.TranslateAPI;
@@ -37,25 +39,16 @@ public class TranslateFragment extends Fragment {
     private String sourceText;
     private String translatedText;
     private String direct;
+    private String indirect;
 
-    private TextView tr_text;
-
+    private TextView sourceTextView;
     private Spinner spinFrom;
     private Spinner spinTo;
 
-    private FrameLayout fragmentContainer;
-
-    //List<Lang> langList = new ArrayList<>();
     ArrayAdapter<Lang> langArrayAdapter;
-
 
     public TranslateFragment() {
         // Required empty public constructor
-    }
-
-    public TranslateFragment newInstance() {
-        TranslateFragment fragment = new TranslateFragment();
-        return fragment;
     }
 
     @Override
@@ -67,9 +60,8 @@ public class TranslateFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_translate, container, false);
 
         spinFrom = (Spinner) view.findViewById(R.id.spin_from);
@@ -79,9 +71,8 @@ public class TranslateFragment extends Fragment {
         spinTo.setAdapter(langArrayAdapter);
         spinTo.setOnItemSelectedListener(new LangSpinnerItemSelectedListener());
 
-        // init text translate label
-        tr_text = (TextView) view.findViewById(R.id.tr_text);
-        tr_text.setOnClickListener(new View.OnClickListener() {
+        sourceTextView = (TextView) view.findViewById(R.id.tr_text);
+        sourceTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), TapToTranslateActivity.class);
@@ -92,8 +83,7 @@ public class TranslateFragment extends Fragment {
             }
         });
 
-
-        tr_text.addTextChangedListener(new TextWatcher() {
+        sourceTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -106,7 +96,7 @@ public class TranslateFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Toast.makeText(tr_text.getContext(), s.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(sourceTextView.getContext(), s.toString(), Toast.LENGTH_SHORT).show();
                 showTranslation(s.toString());
             }
         });
@@ -128,12 +118,24 @@ public class TranslateFragment extends Fragment {
 
                 spinFrom.setSelection(toPosition);
                 spinTo.setSelection(fromPosition);
+
+                String tmp = direct;
+                direct = indirect;
+                indirect = tmp;
+
+                tmp = sourceText;
+                sourceText = translatedText;
+                translatedText = tmp;
+                sourceTextView.setText(sourceText);
             }
         });
 
-        fragmentContainer = (FrameLayout) view.findViewById(R.id.fragment_container);
-
-
+        if(savedInstanceState == null) {
+            Fragment fragment = new HistoryFragment();
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, fragment);
+            transaction.commit();
+        }
 
         return view;
     }
@@ -144,9 +146,8 @@ public class TranslateFragment extends Fragment {
         if (requestCode == TapToTranslateActivity.REQUEST_ID && resultCode == Activity.RESULT_OK) {
             sourceText = data.getStringExtra(TapToTranslateActivity.REQUEST_KEY);
             translatedText = data.getStringExtra(TapToTranslateActivity.REQUEST_RESULT_KEY);
-            tr_text.setText(sourceText);
-            //spinFrom.setSelection();
-
+            sourceTextView.setText(sourceText);
+            History.newInstance().add(new HistoryItem(sourceText, translatedText, direct));
         }
     }
 
@@ -158,7 +159,7 @@ public class TranslateFragment extends Fragment {
             transaction.commit();
 
         } else {
-            DictionaryFragment fragment = DictionaryFragment.newInstance(translatedText, direct);
+            DictionaryFragment fragment = DictionaryFragment.newInstance(translatedText, indirect);
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container, fragment);
             transaction.commit();
@@ -166,7 +167,7 @@ public class TranslateFragment extends Fragment {
     }
 
     public void clearTranslation() {
-        tr_text.setText(null);
+        sourceTextView.setText(null);
     }
 
     private class GetLangsTask extends AsyncTask<Locale, Void, List<Lang>> {
@@ -180,8 +181,6 @@ public class TranslateFragment extends Fragment {
                 list = api.getLangs(locale_lang);
             }catch (Exception ex) {
                 list = new ArrayList<>();
-                //list.add(new Lang("en", "English", true));
-                //list.add(new Lang("ru", "Russian", false));
             }
             if (list.isEmpty()) {
                 for (ELang l : ELang.values()) {
@@ -193,22 +192,21 @@ public class TranslateFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Lang> langs) {
-            //super.onPostExecute(langs);
-            //langList = langs;
-            for (int i = 0; i < langs.size(); i++) {
-                Lang l = langs.get(i);
+            spinFrom.setOnItemSelectedListener(null);
+            spinTo.setOnItemSelectedListener(null);
+            int index = 0;
+            for (Lang l : langs) {
                 if (l.preferred) {
-                    langArrayAdapter.insert(l, 0);
+                    langArrayAdapter.insert(l, index);
+                    index++;
                 } else {
                     langArrayAdapter.add(l);
                 }
             }
-
-            //add sort
-
-            //spinFrom.setAdapter(langArrayAdapter);
-            //spinTo.setAdapter(langArrayAdapter);
-
+            spinFrom.setSelection(0); // stupid
+            spinTo.setSelection(1); // very stupid
+            spinFrom.setOnItemSelectedListener(new LangSpinnerItemSelectedListener());
+            spinTo.setOnItemSelectedListener(new LangSpinnerItemSelectedListener());
         }
     }
 
@@ -234,6 +232,7 @@ public class TranslateFragment extends Fragment {
             }
 
             direct = ((Lang) spinFrom.getSelectedItem()).code + "-" + ((Lang) spinTo.getSelectedItem()).code;
+            indirect = ((Lang) spinTo.getSelectedItem()).code + "-" + ((Lang) spinFrom.getSelectedItem()).code;
         }
 
         @Override

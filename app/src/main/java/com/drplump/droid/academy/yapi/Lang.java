@@ -1,7 +1,17 @@
 package com.drplump.droid.academy.yapi;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Lang {
+
+    public static final Set<String> SUPER_PREFERRED = new HashSet<String>(Arrays.asList(
+            new String[] {"en", "ru", "uk"}
+    ));
+
     public final String code;
     public final String descriptions;
     public final boolean preferred;

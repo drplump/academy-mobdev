@@ -16,7 +16,7 @@ import java.util.List;
 public class DictionaryAPI extends API {
 
     private final String API_URL = "https://dictionary.yandex.net/api/v1/dicservice";
-    private final String TOKEN = "trnsl.1.1.20170413T121734Z.0479393b2459016b.4c2abd096a68643caa708220f4ea1b4eb1a17397";
+    private final String TOKEN = "dict.1.1.20170413T134252Z.4ca94ebeb188dccc.15dc9b1212c25c4e9e4921f2e0688cc91b35dbed";
 
     public DictionaryAPI(File cacheDir) {
         super(cacheDir);
@@ -75,6 +75,7 @@ public class DictionaryAPI extends API {
                     d.addTrans(tr);
                 }
             }
+            list.add(d);
         }
         return list;
     }

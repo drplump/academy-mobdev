@@ -1,5 +1,6 @@
 package com.drplump.droid.academy.hist;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.drplump.droid.academy.cache.Cache;
@@ -25,12 +26,24 @@ import javax.xml.transform.stream.StreamResult;
 
 public class History {
 
+    private static History instance;
+
     private final Cache cache;
     private final List<HistoryItem> itemList;
 
-    public History(File cacheDir) {
+    private History(File cacheDir) {
         this.cache = Cache.getCachedHistory(cacheDir);
         itemList = new ArrayList<>();
+    }
+
+    public static History newInstance() {
+        return instance;
+    }
+
+    public static void init(File cacheDir) {
+        if (instance == null) {
+            instance = new History(cacheDir);
+        }
     }
 
     public List<HistoryItem> list() {
@@ -38,7 +51,14 @@ public class History {
         return itemList;
     }
 
-    private boolean read() {
+    public void add(HistoryItem item) {
+        if(!itemList.contains(item)) {
+            itemList.add(item);
+            new WriteHistoryTask().execute();
+        }
+    }
+
+    private synchronized boolean read() {
         if (!cache.verify()) return false;
         Document doc;
         try {
@@ -79,7 +99,7 @@ public class History {
         return true;
     }
 
-    private boolean write() {
+    private synchronized boolean write() {
         if (itemList.isEmpty() || !cache.delete()) return false;
 
         Document doc;
@@ -117,6 +137,20 @@ public class History {
         }
 
         return true;
+    }
+
+    private class WriteHistoryTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return write();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(!aBoolean) Log.e(History.class.getName(), "Error on store history");
+        }
     }
 
 

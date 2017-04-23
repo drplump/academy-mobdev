@@ -41,7 +41,11 @@ public class Cache {
     }
 
     public boolean delete() {
-        return cached.delete();
+        if (cached.exists()) {
+            return cached.delete();
+        } else {
+            return true;
+        }
     }
 
     public boolean verify() {
