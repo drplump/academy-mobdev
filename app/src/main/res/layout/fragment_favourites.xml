@@ -7,39 +7,34 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:background="@color/tabIndicator" >
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
 
         <SearchView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:iconifiedByDefault="false"
+            android:iconifiedByDefault="true"
             android:queryHint="@string/find_in_history"/>
 
         <ImageButton
             android:id="@+id/button_clear_"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:layout_gravity="center_vertical|center_horizontal"
             android:backgroundTint="@color/tabIndicator"
             android:contentDescription="@string/button_description"
             app:srcCompat="@drawable/ic_delete_black_24dp" />
     </LinearLayout>
 
-    <ScrollView
+    <FrameLayout
+        android:id="@+id/fv_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp" >
-
-        <LinearLayout
-            android:id="@+id/favourite_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        </LinearLayout>
-
-    </ScrollView>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

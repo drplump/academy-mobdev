@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.drplump.droid.test02"
+        applicationId "com.drplump.droid.academy"
         minSdkVersion 23
         targetSdkVersion 25
         versionCode 1

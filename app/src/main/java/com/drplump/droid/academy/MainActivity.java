@@ -75,15 +75,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //getSupportFragmentManager().putFragment(outState,TranslateFragment.class.getName(),translateFragment);
-        //getSupportFragmentManager().putFragment(outState,FavouritesFragment.class.getName(),favouritesFragment);
-        //getSupportFragmentManager().putFragment(outState,SettingsFragment.class.getName(),settingsFragment);
-    }
-
-
     class CustomPagerAdapter extends FragmentPagerAdapter {
 
         private final List<Fragment> mFragments = new ArrayList<>();

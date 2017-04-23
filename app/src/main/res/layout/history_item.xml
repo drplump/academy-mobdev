@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@drawable/bottom_border">
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:background="@android:color/background_light">
 
     <TextView
         android:id="@+id/hitem_direct"
@@ -17,6 +19,7 @@
         android:layout_gravity="center_vertical|center_horizontal" />
 
     <LinearLayout
+        android:id="@+id/hitem_holder"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

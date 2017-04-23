@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:background="@color/tabIndicator" >
 
@@ -29,8 +29,7 @@
             android:id="@+id/button_swipe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center"
-            android:padding="10dp"
+            android:layout_gravity="center_vertical|center_horizontal"
             android:backgroundTint="@color/tabIndicator"
             android:contentDescription="@string/button_description"
             app:srcCompat="@drawable/ic_swap_horiz_black_24dp" />
@@ -54,17 +53,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border"
-        android:orientation="vertical"
-        android:layout_margin="10dp"
-        android:padding="10dp">
+        android:background="@android:color/background_light"
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_margin="10dp"
+            android:background="@drawable/border"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
             <LinearLayout
+                android:id="@+id/tr_text_holder"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -74,15 +75,14 @@
                     android:id="@+id/tr_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
                     android:hint="@string/text_tap_to_enter"
-                    android:clickable="true" />
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/tr_ts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -95,9 +95,9 @@
                     android:id="@+id/button_clear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:background="@android:color/transparent"
+                    android:backgroundTint="@android:color/background_light"
                     android:contentDescription="@string/button_description"
+                    android:padding="5dp"
                     app:srcCompat="@drawable/ic_clear_black_24dp" />
 
                 <Space
@@ -112,11 +112,9 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/fragment_container"
+        android:id="@+id/tr_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_height="match_parent" />
 
 
 

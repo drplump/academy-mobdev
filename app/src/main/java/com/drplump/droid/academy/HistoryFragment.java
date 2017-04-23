@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,27 +16,72 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.drplump.droid.academy.hist.History;
 import com.drplump.droid.academy.hist.HistoryItem;
 
+import java.util.List;
+
 public class HistoryFragment extends Fragment {
+
+    public static final String SHOW_ALL_KEY = "history.show.all";
+
+    private boolean favouritesOnly;
 
     public HistoryFragment() {
         // Required empty public constructor
     }
 
+    public static HistoryFragment newInstance(boolean showAll) {
+        HistoryFragment fragment = new HistoryFragment();
+        Bundle args = new Bundle();
+        args.putString(SHOW_ALL_KEY, String.valueOf(showAll));
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            String text = getArguments().getString(SHOW_ALL_KEY);
+            boolean showAll = true;
+            try {
+                showAll = Boolean.parseBoolean(text);
+            } catch (Exception ex) {
+                Log.e(HistoryFragment.class.getName(), "Boolean parsing error");
+            }
+            favouritesOnly = !showAll;
+        }
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_history, container, false);
+        final SwipeRefreshLayout view = (SwipeRefreshLayout) inflater.inflate(R.layout.fragment_history, container, false);
+        view.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+                view.setRefreshing(false);
+            }
+        });
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        LinearLayout container = (LinearLayout) view.findViewById(R.id.history_container);
+        refresh();
+    }
+
+    public void refresh(){
+        LinearLayout container = (LinearLayout) getView().findViewById(R.id.history_container);
+        container.removeAllViewsInLayout();
         History history = History.newInstance();
         for (HistoryItem h : history.list()) {
+            if(favouritesOnly && !h.isFavourites()) continue;
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View viewItem = inflater.inflate(R.layout.history_item, container, false);
             TextView textDirect = (TextView) viewItem.findViewById(R.id.hitem_direct);
@@ -44,11 +91,40 @@ public class HistoryFragment extends Fragment {
             TextView textTranslated = (TextView) viewItem.findViewById(R.id.hitem_translated);
             textTranslated.setText(h.translated);
             ImageButton imageButton = (ImageButton) viewItem.findViewById(R.id.hitem_favor);
-            imageButton.setColorFilter(R.color.tabIndicator, PorterDuff.Mode.SRC_IN);
+            if (h.isFavourites()) imageButton.setColorFilter(android.R.color.background_light);
+            imageButton.setOnClickListener(new FavouriteItClickListener(h));
+            View itemHolder = viewItem.findViewById(R.id.hitem_holder);
+            itemHolder.setOnClickListener(new HistoryItemClickListener());
             container.addView(viewItem);
         }
 
+    }
 
+    private class HistoryItemClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            //TODO: Запилить нажималку
+        }
+    }
+
+    private class FavouriteItClickListener implements View.OnClickListener {
+        private final HistoryItem item;
+
+        FavouriteItClickListener(HistoryItem item) {
+            this.item = item;
+        }
+
+        @Override
+        public void onClick(View v) {
+            History history = History.newInstance();
+            item.changeStatus();
+            if(history.update(item)) {
+                refresh();
+            } else {
+                item.changeStatus();
+            }
+        }
     }
 
 }

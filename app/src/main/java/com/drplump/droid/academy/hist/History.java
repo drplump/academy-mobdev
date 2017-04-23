@@ -58,6 +58,17 @@ public class History {
         }
     }
 
+    public boolean update(HistoryItem item) {
+        int index = itemList.indexOf(item);
+        if (index >= 0) {
+            itemList.remove(index);
+            itemList.add(index,item);
+            new WriteHistoryTask().execute();
+            return true;
+        }
+        return false;
+    }
+
     private synchronized boolean read() {
         if (!cache.verify()) return false;
         Document doc;

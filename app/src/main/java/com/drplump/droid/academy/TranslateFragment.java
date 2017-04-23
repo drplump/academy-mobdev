@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
@@ -72,7 +73,8 @@ public class TranslateFragment extends Fragment {
         spinTo.setOnItemSelectedListener(new LangSpinnerItemSelectedListener());
 
         sourceTextView = (TextView) view.findViewById(R.id.tr_text);
-        sourceTextView.setOnClickListener(new View.OnClickListener() {
+        View tr_holder = view.findViewById(R.id.tr_text_holder);
+        tr_holder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), TapToTranslateActivity.class);
@@ -131,9 +133,9 @@ public class TranslateFragment extends Fragment {
         });
 
         if(savedInstanceState == null) {
-            Fragment fragment = new HistoryFragment();
+            Fragment fragment = HistoryFragment.newInstance(true);
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, fragment);
+            transaction.replace(R.id.tr_fragment_container, fragment);
             transaction.commit();
         }
 
@@ -144,8 +146,8 @@ public class TranslateFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == TapToTranslateActivity.REQUEST_ID && resultCode == Activity.RESULT_OK) {
-            sourceText = data.getStringExtra(TapToTranslateActivity.REQUEST_KEY);
-            translatedText = data.getStringExtra(TapToTranslateActivity.REQUEST_RESULT_KEY);
+            sourceText = data.getStringExtra(TapToTranslateActivity.REQUEST_KEY).trim();
+            translatedText = data.getStringExtra(TapToTranslateActivity.REQUEST_RESULT_KEY).trim();
             sourceTextView.setText(sourceText);
             History.newInstance().add(new HistoryItem(sourceText, translatedText, direct));
         }
@@ -153,20 +155,22 @@ public class TranslateFragment extends Fragment {
 
     private void showTranslation(String text) {
         if (text.isEmpty()) {
-            Fragment fragment = new HistoryFragment();
+            Fragment fragment = HistoryFragment.newInstance(true);
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, fragment);
+            transaction.replace(R.id.tr_fragment_container, fragment);
             transaction.commit();
 
         } else {
             DictionaryFragment fragment = DictionaryFragment.newInstance(translatedText, indirect);
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container, fragment);
+            transaction.replace(R.id.tr_fragment_container, fragment);
             transaction.commit();
         }
     }
 
     public void clearTranslation() {
+        sourceText = null;
+        translatedText = null;
         sourceTextView.setText(null);
     }
 
@@ -233,6 +237,8 @@ public class TranslateFragment extends Fragment {
 
             direct = ((Lang) spinFrom.getSelectedItem()).code + "-" + ((Lang) spinTo.getSelectedItem()).code;
             indirect = ((Lang) spinTo.getSelectedItem()).code + "-" + ((Lang) spinFrom.getSelectedItem()).code;
+
+            clearTranslation();
         }
 
         @Override
