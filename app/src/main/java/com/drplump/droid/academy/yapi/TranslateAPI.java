@@ -9,12 +9,10 @@ import java.net.URLEncoder;
 
 public class TranslateAPI extends API {
 
+    public final static String ERROR_MESSAGE = "translation service error";
+
     private final String API_URL = "https://translate.yandex.net/api/v1.5/tr";
     private final String TOKEN = "trnsl.1.1.20170413T121734Z.0479393b2459016b.4c2abd096a68643caa708220f4ea1b4eb1a17397";
-
-    public TranslateAPI(File cacheDir) {
-        super(cacheDir);
-    }
 
     @Override
     String getServicePrefix(String service) {

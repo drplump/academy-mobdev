@@ -7,11 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.drplump.droid.academy.yapi.TranslateAPI;
 
@@ -39,7 +41,7 @@ public class TapToTranslateActivity extends AppCompatActivity {
         textInput.setHint(getString(R.string.text_enter_text) + " (" + langFrom.toUpperCase() + ")");
         textInput.requestFocus();
         textTranslated = (EditText) findViewById(R.id.text_translated);
-        textTranslated.setHint(getString(R.string.text_enter_text) + " (" + langTo.toUpperCase() + ")");
+        textTranslated.setHint(getString(R.string.text_translate_to) + " (" + langTo.toUpperCase() + ")");
 
         textInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -85,6 +87,7 @@ public class TapToTranslateActivity extends AppCompatActivity {
     }
 
     public void setResult(View v) {
+        if (textTranslated.getText().toString().isEmpty()) return;
         //return result to main activity
         Intent intent = new Intent();
         intent.putExtra(REQUEST_KEY, textInput.getText().toString());
@@ -96,12 +99,13 @@ public class TapToTranslateActivity extends AppCompatActivity {
     private class TextTranslateTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            TranslateAPI api = new TranslateAPI(getApplicationContext().getFilesDir());
+            TranslateAPI api = new TranslateAPI();
             String result = "";
             try {
                 result = api.translate(params[0], langFrom, langTo);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                Log.e(TapToTranslateActivity.class.getName(), TranslateAPI.ERROR_MESSAGE, ex);
+                Toast.makeText(getApplicationContext(),TranslateAPI.ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
             return result;
         }

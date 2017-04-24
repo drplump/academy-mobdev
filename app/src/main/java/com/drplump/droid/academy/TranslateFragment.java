@@ -5,17 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,8 +33,8 @@ import java.util.Locale;
 
 public class TranslateFragment extends Fragment {
 
-    final static String LANG_FROM_KEY = "com.drplump.droid.test02.lang.from";
-    final static String LANG_TO_KEY = "com.drplump.droid.test02.lang.to";
+    final static String LANG_FROM_KEY = "com.drplump.droid.academy.lang.from";
+    final static String LANG_TO_KEY = "com.drplump.droid.academy.lang.to";
 
     private String sourceText;
     private String translatedText;
@@ -65,13 +64,6 @@ public class TranslateFragment extends Fragment {
                              final Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_translate, container, false);
 
-        spinFrom = (Spinner) view.findViewById(R.id.spin_from);
-        spinFrom.setAdapter(langArrayAdapter);
-        spinFrom.setOnItemSelectedListener(new LangSpinnerItemSelectedListener());
-        spinTo = (Spinner) view.findViewById(R.id.spin_to);
-        spinTo.setAdapter(langArrayAdapter);
-        spinTo.setOnItemSelectedListener(new LangSpinnerItemSelectedListener());
-
         sourceTextView = (TextView) view.findViewById(R.id.tr_text);
         View tr_holder = view.findViewById(R.id.tr_text_holder);
         tr_holder.setOnClickListener(new View.OnClickListener() {
@@ -98,10 +90,14 @@ public class TranslateFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Toast.makeText(sourceTextView.getContext(), s.toString(), Toast.LENGTH_SHORT).show();
                 showTranslation(s.toString());
             }
         });
+
+        spinFrom = (Spinner) view.findViewById(R.id.spin_from);
+        spinFrom.setAdapter(langArrayAdapter);
+        spinTo = (Spinner) view.findViewById(R.id.spin_to);
+        spinTo.setAdapter(langArrayAdapter);
 
         ImageButton buttonClear = (ImageButton) view.findViewById(R.id.button_clear);
         buttonClear.setOnClickListener(new View.OnClickListener() {
@@ -111,13 +107,12 @@ public class TranslateFragment extends Fragment {
             }
         });
 
-        ImageButton buttonSwipe = (ImageButton) view.findViewById(R.id.button_swipe);
-        buttonSwipe.setOnClickListener(new View.OnClickListener() {
+        ImageButton buttonSwitch = (ImageButton) view.findViewById(R.id.button_swipe);
+        buttonSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int fromPosition = spinFrom.getSelectedItemPosition();
                 int toPosition = spinTo.getSelectedItemPosition();
-
                 spinFrom.setSelection(toPosition);
                 spinTo.setSelection(fromPosition);
 
@@ -179,11 +174,13 @@ public class TranslateFragment extends Fragment {
         @Override
         protected List<Lang> doInBackground(Locale... params) {
             List<Lang> list;
-            TranslateAPI api = new TranslateAPI(getContext().getFilesDir());
+            TranslateAPI api = new TranslateAPI();
             String locale_lang = params[0].getLanguage();
             try {
                 list = api.getLangs(locale_lang);
-            }catch (Exception ex) {
+            } catch (Exception ex) {
+                Log.e(TranslateFragment.class.getName(), TranslateAPI.ERROR_MESSAGE, ex);
+                Toast.makeText(getContext(), TranslateAPI.ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
                 list = new ArrayList<>();
             }
             if (list.isEmpty()) {
@@ -196,8 +193,6 @@ public class TranslateFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Lang> langs) {
-            spinFrom.setOnItemSelectedListener(null);
-            spinTo.setOnItemSelectedListener(null);
             int index = 0;
             for (Lang l : langs) {
                 if (l.preferred) {
@@ -215,7 +210,7 @@ public class TranslateFragment extends Fragment {
     }
 
     private class LangSpinnerItemSelectedListener implements AdapterView.OnItemSelectedListener {
-
+        //TODO: добавить реакцию на смену языка с переводом текущего значения
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             Spinner t;
@@ -226,7 +221,6 @@ public class TranslateFragment extends Fragment {
             } else {
                 return;
             }
-
             if (t.getSelectedItemPosition() == position) {
                 if (++position == t.getAdapter().getCount()) {
                     t.setSelection(--position);
@@ -234,11 +228,8 @@ public class TranslateFragment extends Fragment {
                     t.setSelection(++position);
                 }
             }
-
             direct = ((Lang) spinFrom.getSelectedItem()).code + "-" + ((Lang) spinTo.getSelectedItem()).code;
             indirect = ((Lang) spinTo.getSelectedItem()).code + "-" + ((Lang) spinFrom.getSelectedItem()).code;
-
-            clearTranslation();
         }
 
         @Override

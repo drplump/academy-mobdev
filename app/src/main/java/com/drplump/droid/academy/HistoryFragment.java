@@ -1,11 +1,7 @@
 package com.drplump.droid.academy;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -14,14 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.drplump.droid.academy.hist.History;
 import com.drplump.droid.academy.hist.HistoryItem;
-
-import java.util.List;
 
 public class HistoryFragment extends Fragment {
 

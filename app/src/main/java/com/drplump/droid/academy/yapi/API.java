@@ -2,6 +2,7 @@ package com.drplump.droid.academy.yapi;
 
 
 import com.drplump.droid.academy.cache.Cache;
+import com.drplump.droid.academy.cache.CacheDir;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -11,6 +12,7 @@ import org.w3c.dom.NodeList;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -33,20 +35,15 @@ import javax.xml.xpath.XPathFactory;
 
 public abstract class API {
 
+    public final static String DEFAULT_ERROR_MESSAGE = "api service error";
+
     final String P_KEY = "&key=";
     final String P_LANG = "&lang=";
     final String P_TEXT = "&text=";
     final String P_HINT = "&hint=";
     final String P_UI = "&ui=";
 
-    final File cacheDir;
-
-    public API(File cacheDir) {
-        this.cacheDir = cacheDir;
-    }
-
     private void offCheckSSL() throws Exception {
-
         TrustManager[] trustAllCerts = new TrustManager[] {
                 new X509TrustManager() {
                     public java.security.cert.X509Certificate[] getAcceptedIssuers() {
@@ -60,41 +57,42 @@ public abstract class API {
                     }
                 }
         };
-
         SSLContext sc = SSLContext.getInstance("SSL");
         sc.init(null, trustAllCerts, new java.security.SecureRandom());
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
     }
 
     Document getResponse(URL url) throws Exception {
-
-        offCheckSSL();
-
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-        Document doc = docBuilder.parse(url.openStream());
+        Document doc;
+        try {
+            doc = docBuilder.parse(url.openStream());
+        } catch (Exception ex) {
+            offCheckSSL();
+            doc = docBuilder.parse(url.openStream());
+        }
         doc.getDocumentElement().normalize();
-
         return doc;
     }
 
     Document getResponse(final File cached) throws Exception {
-
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
         Document doc = docBuilder.parse(new FileInputStream(cached));
         doc.getDocumentElement().normalize();
         return doc;
-
     }
 
     void getContent(URL url, Cache cache) throws Exception {
-
         if (cache.verify()) return;
-
-        offCheckSSL();
-
-        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+        ReadableByteChannel rbc;
+        try {
+            rbc = Channels.newChannel(url.openStream());
+        } catch (IOException ex) {
+            offCheckSSL();
+            rbc = Channels.newChannel(url.openStream());
+        }
         try {
             FileOutputStream fos = new FileOutputStream(cache.getPath());
             try {
@@ -112,7 +110,7 @@ public abstract class API {
         String SERVICE = "/getLangs";
 
         List<Lang> list = new ArrayList<>();
-        Cache cache = Cache.getCachedLang(cacheDir, locale_code);
+        Cache cache = Cache.getCachedLang(locale_code);
 
         getContent(new URL(getServicePrefix(SERVICE) + P_UI + locale_code), cache);
 

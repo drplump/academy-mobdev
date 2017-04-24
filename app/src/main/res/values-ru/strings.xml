@@ -4,4 +4,8 @@
     <string name="button_description">Кнопка</string>
     <string name="text_tap_to_enter">Нажмите для ввода</string>
     <string name="text_enter_text">Введите текст</string>
+    <string name="text_translate_to">Перевод</string>
+    <string name="message_clear_history_confirm">Удалить всю историю?</string>
+    <string name="message_clear_history">удалить историю</string>
+    <string name="text_app_description">Тестовое приложение для \n academy.yandex.ru</string>
 </resources>

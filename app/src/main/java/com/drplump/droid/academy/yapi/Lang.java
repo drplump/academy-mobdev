@@ -22,6 +22,24 @@ public class Lang {
         this.preferred = preferred;
     }
 
+    public static Lang parseFrom(String direction) {
+        String[] dirs = direction.split("-");
+        ELang l = ELang.fromString(dirs[0]);
+        if (l != null) {
+            return new Lang(l.toString(), l.name(), false);
+        }
+        return null;
+    }
+
+    public static Lang parseTo(String direction) {
+        String[] dirs = direction.split("-");
+        ELang l = ELang.fromString(dirs[1]);
+        if (l != null) {
+            return new Lang(l.toString(), l.name(), false);
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return this.descriptions;

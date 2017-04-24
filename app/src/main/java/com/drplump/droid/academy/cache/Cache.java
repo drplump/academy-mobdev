@@ -53,17 +53,18 @@ public class Cache {
         return cached.length() != 0 || !cached.delete();
     }
 
-    public static Cache getCachedLang(File cachedDir, String lang) {
-        return new Cache(cachedDir, LANG_CACHE + "/" + lang + ".xml");
+    public static Cache getCachedLang(String lang) {
+        return new Cache(CacheDir.newInstance(), LANG_CACHE + "/" + lang + ".xml");
     }
 
-    public static Cache getCachedDict(File cachedDir, String direct, String text) {
-        return new Cache(cachedDir, DICT_CACHE + "/" + direct + "/" + text + ".xml");
+    public static Cache getCachedDict(String direct, String text) {
+        return new Cache(CacheDir.newInstance(), DICT_CACHE + "/" + direct + "/" + text + ".xml");
     }
 
-    public static Cache getCachedHistory(File cachedDir) {
-        return new Cache(cachedDir, HIST_CACHE + "/history.xml");
+    public static Cache getCachedHistory() {
+        return new Cache(CacheDir.newInstance(), HIST_CACHE + "/history.xml");
     }
+
 
     private class CacheIndex {
 

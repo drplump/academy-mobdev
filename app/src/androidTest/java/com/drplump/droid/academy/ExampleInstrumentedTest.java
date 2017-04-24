@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.drplump.droid.test02", appContext.getPackageName());
+        assertEquals("com.drplump.droid.academy", appContext.getPackageName());
     }
 }

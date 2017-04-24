@@ -1,9 +1,11 @@
 package com.drplump.droid.academy;
 
+import com.drplump.droid.academy.cache.CacheDir;
 import com.drplump.droid.academy.yapi.ELang;
 import com.drplump.droid.academy.yapi.Lang;
 import com.drplump.droid.academy.yapi.TranslateAPI;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -15,12 +17,18 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class YAPIUnitTest {
+
+    @Before
+    public void setUp() throws Exception {
+        CacheDir.init(System.getenv("tmp"));
+    }
+
     @Test
     public void translate_singleWord() throws Exception {
         final String TEXT = "hello world";
         TranslateAPI api = new TranslateAPI();
-        String result = api.translate(TEXT, ELang.ENGLISH, ELang.RUSSIAN);
+        String result = api.translate(TEXT, ELang.ENGLISH.toString(), ELang.RUSSIAN.toString());
         assertEquals(result.toLowerCase(), "привет мир");
     }
 
@@ -28,8 +36,8 @@ public class ExampleUnitTest {
     public void translate_reverseWord() throws Exception {
         final String TEXT = "hello world";
         TranslateAPI api = new TranslateAPI();
-        String result = api.translate(TEXT, ELang.ENGLISH, ELang.RUSSIAN);
-        String reserseResult = api.translate(result, ELang.RUSSIAN, ELang.ENGLISH);
+        String result = api.translate(TEXT, ELang.ENGLISH.toString(), ELang.RUSSIAN.toString());
+        String reserseResult = api.translate(result, ELang.RUSSIAN.toString(), ELang.ENGLISH.toString());
         assertEquals(reserseResult.toLowerCase(), TEXT.toLowerCase());
     }
 
@@ -38,11 +46,11 @@ public class ExampleUnitTest {
         final String TEXT = "привет мир";
         TranslateAPI api = new TranslateAPI();
 
-        ELang lang = api.detect(TEXT, null);
+        ELang lang = ELang.fromString(api.detect(TEXT, null));
 
         if (lang == null) throw new NullPointerException();
 
-        String result = api.translate(TEXT, lang, ELang.ENGLISH);
+        String result = api.translate(TEXT, lang.toString(), ELang.ENGLISH.toString());
         assertEquals(result.toLowerCase(), "hello world");
     }
 

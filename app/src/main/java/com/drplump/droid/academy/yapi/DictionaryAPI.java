@@ -15,12 +15,10 @@ import java.util.List;
 
 public class DictionaryAPI extends API {
 
+    public final static String ERROR_MESSAGE = "dictionary service error";
+
     private final String API_URL = "https://dictionary.yandex.net/api/v1/dicservice";
     private final String TOKEN = "dict.1.1.20170413T134252Z.4ca94ebeb188dccc.15dc9b1212c25c4e9e4921f2e0688cc91b35dbed";
-
-    public DictionaryAPI(File cacheDir) {
-        super(cacheDir);
-    }
 
     @Override
     String getServicePrefix(String service) {
@@ -33,7 +31,7 @@ public class DictionaryAPI extends API {
 
         List<Dict> list = new ArrayList<>();
 
-        Cache cache = Cache.getCachedDict(cacheDir, direct, text);
+        Cache cache = Cache.getCachedDict(direct, text);
 
         getContent(new URL(getServicePrefix(SERVICE) + P_LANG + direct + P_TEXT + URLEncoder.encode(text, "UTF-8") + P_UI + localeCode), cache);
 

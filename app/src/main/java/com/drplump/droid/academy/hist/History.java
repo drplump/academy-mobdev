@@ -31,8 +31,8 @@ public class History {
     private final Cache cache;
     private final List<HistoryItem> itemList;
 
-    private History(File cacheDir) {
-        this.cache = Cache.getCachedHistory(cacheDir);
+    private History() {
+        this.cache = Cache.getCachedHistory();
         itemList = new ArrayList<>();
     }
 
@@ -40,9 +40,9 @@ public class History {
         return instance;
     }
 
-    public static void init(File cacheDir) {
+    public static void init() {
         if (instance == null) {
-            instance = new History(cacheDir);
+            instance = new History();
         }
     }
 
@@ -51,22 +51,29 @@ public class History {
         return itemList;
     }
 
-    public void add(HistoryItem item) {
+    public boolean add(HistoryItem item) {
         if(!itemList.contains(item)) {
-            itemList.add(item);
+            itemList.add(0, item);
             new WriteHistoryTask().execute();
+            return true;
         }
+        return false;
     }
 
     public boolean update(HistoryItem item) {
         int index = itemList.indexOf(item);
         if (index >= 0) {
             itemList.remove(index);
-            itemList.add(index,item);
+            itemList.add(index, item);
             new WriteHistoryTask().execute();
             return true;
         }
         return false;
+    }
+
+    public void clear() {
+        itemList.clear();
+        cache.delete();
     }
 
     private synchronized boolean read() {
